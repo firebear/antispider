@@ -303,7 +303,7 @@ def get_char(js):
     return _word_list
 
 def get_complete_text_autohome(text):
-    js = re.search("<!--@HS_ZY@--><script>([\s\S]+)\(document\);</script>", text.encode("utf8"))
+    js = re.search("<script>(\(function\(md_\)[\s\S]+)\(document\);</script>", text.encode("utf8"))
     if not js:
         return text
     try:
@@ -317,10 +317,10 @@ def get_complete_text_autohome(text):
     text = re.sub("<span\s*class=[\'\"]hs_kw(\d+)_[^\'\"]+[\'\"]></span>", char_replace, text)
     return text
 
-resp = requests.get("http://club.autohome.com.cn/bbs/thread-c-3788-62403429-1.html")
+resp = requests.get("http://car.autohome.com.cn/config/spec/1001360.html")
 #resp = requests.get("http://k.autohome.com.cn/spec/27507/view_1524661_1.html?st=2&piap=1|27507|0|0|1|0|0|0|0|0|1")
 resp.encoding = "gbk"
 text = get_complete_text_autohome(resp.text)
 
-print(re.search("<div\s*class=[\'\"]tz-paragraph[^\'\"]*?[\'\"]>([\s\S]+?)</div>", text).group(1))
+print(re.search('var config = (.*?);\r', text, re.DOTALL).group(1))
 #print(re.search("<div\s*class=[\'\"]text-con[^\'\"]*?[\'\"]>([\s\S]+?)</div>", text).group(1))
